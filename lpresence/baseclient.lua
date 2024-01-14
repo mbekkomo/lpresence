@@ -13,9 +13,8 @@ local Payloads = require("lpresence.payloads")
 
 ---@class lpresence.BaseClient_params
 ---@field client_id lpresence.discord_id
----@field loop fun(...): ...
----@field timeout integer
----@field pipe integer
+---@field timeout integer?
+---@field pipe integer?
 
 ---@class lpresence.BaseClient
 ---@overload fun(params: lpresence.discord_id|lpresence.BaseClient_params): lpresence.BaseClient

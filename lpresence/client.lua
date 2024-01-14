@@ -42,7 +42,7 @@ function Client:close()
     copas.removethread(coroutine.running())
 end
 
----@param client_id integer OAuth2 Application ID.
+---@param client_id lpresence.discord_id OAuth2 Application ID.
 ---@param scopes string[] List of [OAuth2 scopes](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
 ---@return string code
 --
@@ -80,7 +80,7 @@ function Client:get_guild(id)
 end
 
 ---@see lpresence.Client.get_guild
----@return table response List of data containing the response (which in case guild object), see [guild object](https://discord.com/developers/docs/resources/guild#guild-object).
+---@return table[] response List of data containing the response (which in case guild object), see [guild object](https://discord.com/developers/docs/resources/guild#guild-object).
 --
 -- Get all guilds the client is in.
 --
@@ -88,6 +88,46 @@ function Client:get_guilds()
     local payload = Payloads:get_guilds()
     self:send(1, payload)
     return self:read().data
+end
+
+function Client:get_channel(id)
+    local payload = Payloads:get_channel(id)
+    self:send(1, payload)
+    return self:read().data
+end
+
+function Client:get_channels(id)
+    local payload = Payloads:get_channels(id)
+    self:send(1, payload)
+    return self:read().data
+end
+
+function Client:set_user_voice_settings(user_id, pan_left, pan_right, volume, mute)
+   local payload = Payloads:set_user_voice_settings(user_id, pan_left, pan_right, volume, mute)
+   self:send(1, payload)
+   return seld:read().data
+end
+
+function Client:select_voice_channel(id)
+    local payload = Payloads:select_text_channel(id)
+    self:send(1, payload)
+    return self:read().data
+end
+
+function Client:get_selected_voice_channel()
+    local payload = Payloads:get_selected_voice_channel()
+    self:send(1, payload)
+    return self:read().data
+end
+
+function Client:select_text_channel(id)
+    local payload = Payloads:select_text_channel(id)
+    self:send(1, payload)
+    return self:read().data
+end
+
+function Client:()
+    
 end
 
 return Client
