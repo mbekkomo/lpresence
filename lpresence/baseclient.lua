@@ -5,22 +5,10 @@ local class = require("classy")
 local copas = require("copas")
 local json = require("cjson")
 local utils = require("lpresence.utils")
-
+local vstruct = require("lpresence.vstruct")
+local winapi = require("lpresence.winapi")
 local Payloads = require("lpresence.payloads")
 
----@diagnostic disable-next-line:unused-local
-local vstruct_ok, vstruct = pcall(require, "vstruct")
-if not (string.pack and string.unpack) and not vstruct_ok then
-    error(
-        "vstruct is required on Lua environment that doesn't support string.{,un}pack (i.e before Lua 5.3), see https://github.com/toxicfrog/vstruct/#31-installation"
-    )
-end
-
----@diagnostic disable-next-line:unused-local
-local winapi_ok, winapi = pcall(require, "winapi")
-if utils.on_windows and not winapi_ok then
-    error("winapi is required on Windows platform to run lpresence, see https://stevedonovan.github.io/winapi")
-end
 
 ---@class lpresence.BaseClient_params
 ---@field client_id lpresence.discord_id
@@ -43,89 +31,103 @@ function BaseClient:__init(params)
     end
 end
 
-function BaseClient:read()
-    local preamble = self.sread(8)
-    local length
-    if vstruct_ok then
-        _, length = vstruct.readvals("<(2*u4)", preamble:sub(8))
+function BaseClient:_sread(n)
+    local d
+    if utils.on_windows then
+        copas.timeout(self.timeout, self.to_handler)
+        d = self.sock:read(n)
+        copas.timeout(0)
     else
-        _, length = string.unpack("<II", preamble:sub(8))
+        d = copas.receive(self.sock, n)
     end
-    local p = self.sread(length)
-    local data = json.decode(p)
+    return d
+end
 
-    local payload = json.decode(data)
+function BaseClient:_swrite(d)
+    if utils.on_windows then
+        copas.timeout(self.timeout, self.to_handler)
+        self.sock:write(d)
+        copas.timeout(0)
+    else
+        copas.send(self.sock, d)
+    end
+end
+
+function BaseClient:_sclose()
+    if not utils.on_windows then
+        self.sock:shutdown()
+    end
+    self.sock:close()
+end
+
+---@return table
+function BaseClient:read()
+    local preamble = self:_sread(8)
+    local length
+    if vstruct then
+        _, length = vstruct.readvals("<(2*u4)", preamble)
+    else
+        _, length = string.unpack("<II", preamble)
+    end
+    local p = self:_sread(length)
+    local payload = json.decode(p)
+
     if payload.evt == "ERROR" then error("Server returned an error: " .. payload.data.message) end
     return payload
 end
 
+---@param op integer
+---@param payload table
 function BaseClient:send(op, payload)
-    if class.is_a(payload, Payloads) then payload = payload.data end
-    payload = json.encode(payload)
+        if class.is_a(payload, Payloads) then payload = payload.data end
+        local json_payload = json.encode(payload)
 
-    assert(self.swrite, "You must connect before sending events")
+        assert(self._swrite, "You must connect before sending events")
 
-    local data
-    if vstruct_ok then
-        data = vstruct.write("<2*u4", { op, #payload })
-    else
-        data = string.pack("<II", op, #payload)
-    end
+        local data
+        if vstruct then
+            data = vstruct.write("<(2*u4)", { op, #json_payload })
+        else
+            data = string.pack("<II", op, #json_payload)
+        end
 
-    self.swrite(data .. payload)
+        self:_swrite(data .. json_payload)
 end
 
 function BaseClient:handshake()
     local ipc_path = assert(utils.get_ipc_path(self.pipe), "Unable to find Discord IPC path")
 
-    copas.addthread(function()
-        if not utils.on_windows then
-            local unix_socket = require("socket.unix")
-            local s = assert(unix_socket())
+    if not utils.on_windows then
+        local unix_socket = require("socket.unix")
+        local s = assert(unix_socket())
 
-            copas.settimeout(s, self.timeout)
+        copas.settimeout(s, self.timeout)
 
-            assert(copas.connect(s, ipc_path))
+        assert(copas.connect(s, ipc_path))
 
-            function self.sread(n)
-                return assert(copas.receive(s, n))
-            end
-            function self.swrite(d)
-                return assert(copas.send(s, d))
-            end
-        else
-            local p = assert(winapi.open_pipe(ipc_path), "Unable to open Discord IPC pipe")
+        self.sock = s
+    elseif winapi then
+        local p = assert(winapi.open_pipe(ipc_path), "Unable to open Discord IPC pipe")
 
-            local function to_handler()
-                p:close()
-            end
-
-            function self.sread(n)
-                copas.timeout(self.timeout, to_handler)
-                local d = assert(p:read(n))
-                copas.timeout(0)
-                return d
-            end
-            function self.swrite(d)
-                copas.timeout(self.timeout, to_handler)
-                assert(p:write(d))
-                copas.timeout(0)
-            end
+        function self.to_handler()
+            p:close()
         end
 
-        self:send(0, { v = 1, client_id = self.client_id })
-        local preamble = self.sread(8)
-        local code, length
-        if vstruct_ok then
-            code, length = vstruct.readvals("<(2*i4)", preamble)
-        else
-            code, length = string.unpack("<ii", preamble)
-        end
-        local p = self.sread(length)
-        local data = json.decode(p)
+        self.sock = p
+    end
 
-        if data.code then error(("Error: [%d] %s"):format(data.code, data.message)) end
-    end)
+    self:send(0, { v = 1, client_id = self.client_id })
+    local preamble = self:_sread(8)
+    local length
+    if vstruct then
+        _, length = vstruct.readvals("<(2*i4)", preamble)
+    else
+        _, length = string.unpack("<ii", preamble)
+    end
+    local p = self:_sread(length)
+    local data = json.decode(p)
+
+    if data.code then error(("Error: [%d] %s"):format(data.code, data.message)) end
 end
 
 return BaseClient
