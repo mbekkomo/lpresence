@@ -214,7 +214,7 @@ function Payloads:send_activity_join_invite(user_id)
         args = {
             user_id = tostring(user_id),
         },
-        nonce = self:time()
+        nonce = self:time(),
     }
 end
 
@@ -226,7 +226,7 @@ function Payloads:close_activity_request(user_id)
         args = {
             user_id = tostring(user_id),
         },
-        nonce = self:time()
+        nonce = self:time(),
     }
 end
 
@@ -238,7 +238,7 @@ function Payloads:subscribe(event, args)
         cmd = "SUBSCRIBE",
         args = args or {},
         evt = event:upper(),
-        nonce = self:time()
+        nonce = self:time(),
     }
 end
 
