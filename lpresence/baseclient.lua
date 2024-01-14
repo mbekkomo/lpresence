@@ -7,6 +7,7 @@ local json = require("cjson")
 local utils = require("lpresence.utils")
 local vstruct = require("lpresence.vstruct")
 local winapi = require("lpresence.winapi")
+local error_kind = require("lpresence.error_kind")
 local Payloads = require("lpresence.payloads")
 
 
@@ -72,7 +73,7 @@ function BaseClient:read()
     local p = self:_sread(length)
     local payload = json.decode(p)
 
-    if payload.evt == "ERROR" then error("Server returned an error: " .. payload.data.message) end
+    if payload.evt == "ERROR" then error(error_kind.server_error(payload.data.message)) end
     return payload
 end
 
@@ -82,7 +83,7 @@ function BaseClient:send(op, payload)
         if class.is_a(payload, Payloads) then payload = payload.data end
         local json_payload = json.encode(payload)
 
-        assert(self._swrite, "You must connect before sending events")
+        assert(self.sock, "You'll to connect your client before sending events")
 
         local data
         if vstruct then
@@ -95,7 +96,7 @@ function BaseClient:send(op, payload)
 end
 
 function BaseClient:handshake()
-    local ipc_path = assert(utils.get_ipc_path(self.pipe), "Unable to find Discord IPC path")
+    local ipc_path = assert(utils.get_ipc_path(self.pipe), error_kind.invalid_path())
 
     if not utils.on_windows then
         local unix_socket = require("socket.unix")
@@ -103,14 +104,14 @@ function BaseClient:handshake()
 
         copas.settimeout(s, self.timeout)
 
-        assert(copas.connect(s, ipc_path))
+        assert(copas.connect(s, ipc_path), error_kind.invalid_pipe())
 
         self.sock = s
     elseif winapi then
-        local p = assert(winapi.open_pipe(ipc_path), "Unable to open Discord IPC pipe")
+        local p = assert(winapi.open_pipe(ipc_path), error_kind.invalid_pipe())
 
         function self.to_handler()
-            p:close()
+            error(error_kind.connection_timed_out())
         end
 
         self.sock = p
@@ -127,7 +128,12 @@ function BaseClient:handshake()
     local p = self:_sread(length)
     local data = json.decode(p)
 
-    if data.code then error(("Error: [%d] %s"):format(data.code, data.message)) end
+    if data.code then
+        if data.code == 4000 then
+            error(error_kind.invalid_client_id(self.client_id))
+        end
+        error(error_kind.handshake_failed(data.code, data.message))
+    end
 end
 
 return BaseClient
