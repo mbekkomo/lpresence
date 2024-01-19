@@ -30,9 +30,7 @@ end
 --
 function RPC:close()
     self:send(2, { v = 1, client_id = self.client_id })
-    if utils.on_windows then
-        self.sock:shutdown("rw")
-    end
+    if utils.on_windows then self.sock:shutdown("rw") end
     self.sock:close()
 end
 
@@ -94,7 +92,7 @@ end
 ---| 32 # PLAY
 ---| 64 # PARTY_PRIVACY_FRIENDS
 ---| 128 # PARTY_PRIVACY_VOICE_CHANNEL
----| 256 # EMBEDDED 
+---| 256 # EMBEDDED
 
 ---@class lpresence.Activity.button
 ---@field label string
@@ -103,12 +101,12 @@ end
 ---@param activity lpresence.Activity
 ---@param pid? integer
 ---@return table response
--- 
+--
 -- Update rich presence.
 --
 function RPC:update(activity, pid)
     local payload = payloads.set_activity(activity, pid)
-    print(require"inspect"(payload))
+    print(require "inspect"(payload))
     self:send(1, payload)
     return self:read().data
 end
@@ -119,9 +117,9 @@ end
 -- Clear rich presence.
 --
 function RPC:clear(pid)
-   local payload = payloads.set_activity(nil, pid)
-   self:send(1, payload)
-   return self:read().data
+    local payload = payloads.set_activity(nil, pid)
+    self:send(1, payload)
+    return self:read().data
 end
 
 return RPC

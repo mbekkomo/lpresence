@@ -12,7 +12,7 @@ end
 
 ---@param id string|integer
 function error_kind.invalid_client_id(id)
-    return "Invalid client ID: "..id
+    return "Invalid client ID: " .. id
 end
 
 ---@param code integer

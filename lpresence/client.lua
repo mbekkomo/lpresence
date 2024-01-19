@@ -7,7 +7,7 @@
 
 local BaseClient = require("lpresence.baseclient")
 local payloads = require("lpresence.payloads")
-local utils    = require("lpresence.utils")
+local utils = require("lpresence.utils")
 
 local class = require("classy")
 
@@ -39,9 +39,7 @@ end
 --
 function Client:close()
     self:send(2, { v = 1, client_id = self.client_id })
-    if not utils.on_windows then
-        self.sock:shutdown("rw")
-    end
+    if not utils.on_windows then self.sock:shutdown("rw") end
     self.sock:close()
     self._closed = true
 end
@@ -55,7 +53,7 @@ function Client:authorize(client_id, scopes)
     return self:read().data.code
 end
 
----@param token string 
+---@param token string
 ---@return table response
 ---@see lpresence.Client.authorize
 function Client:authenticate(token)
@@ -65,7 +63,7 @@ function Client:authenticate(token)
 end
 
 ---@see lpresence.Client.get_guilds
----@param id lpresence.snowflake 
+---@param id lpresence.snowflake
 ---@return table response
 function Client:get_guild(id)
     local payload = payloads.get_guild(id)
@@ -106,9 +104,9 @@ end
 ---@param mute boolean?
 ---@return table response
 function Client:set_user_voice_settings(user_id, pan_left, pan_right, volume, mute)
-   local payload = payloads.set_user_voice_settings(user_id, pan_left, pan_right, volume, mute)
-   self:send(1, payload)
-   return self:read().data
+    local payload = payloads.set_user_voice_settings(user_id, pan_left, pan_right, volume, mute)
+    self:send(1, payload)
+    return self:read().data
 end
 
 ---@param id lpresence.snowflake

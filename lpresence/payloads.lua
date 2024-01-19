@@ -19,7 +19,7 @@ end
 local payloads = setmetatable({}, {
     __tostring = function(self)
         return json.encode(self.data)
-    end
+    end,
 })
 
 ---@param client_id lpresence.snowflake
