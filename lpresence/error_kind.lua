@@ -29,8 +29,12 @@ function error_kind.server_error(msg)
     return msg:sub(1, 1):upper() .. msg:sub(2)
 end
 
-function error_kind.connection_timed_out()
-    return "Unable to connect, connection timed out"
+function error_kind.timed_out()
+    return "Unable to connect, poll timed out"
+end
+
+function error_kind.module_not_found(module, additional_msg)
+    return ("Unable to load '%s' module, %s"):format(module, additional_msg)
 end
 
 return error_kind

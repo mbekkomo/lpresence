@@ -1,13 +1,16 @@
-local copas = require("copas")
-local Client = require("lpresence.client")
+local RPC = require("lpresence.rpc")
 
-copas(function()
-    local client = Client("954917214685892620")
 
-    client:connect()
+local rpc = RPC("1197916593200578610")
 
-    local token = client:authorize("954917214685892620", {"rpc"})
-    print(require("inspect")(client:authenticate("Bearer "..token)))
+rpc:connect()
 
-    client:close()
-end)
+rpc:update({
+    type = 0,
+    state = "Hey!",
+    details = "Purely in Lua!",
+})
+
+io.read"a"
+
+rpc:close()

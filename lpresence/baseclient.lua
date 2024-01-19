@@ -1,29 +1,30 @@
 -- Enable compatibilty for Pluto 0.9.0+
 -- @pluto_use class = false
 
-local class = require("classy")
-local copas = require("copas")
-local json = require("cjson")
-local utils = require("lpresence.utils")
-local vstruct = require("lpresence.vstruct")
-local winapi = require("lpresence.winapi")
-local error_kind = require("lpresence.error_kind")
-local Payloads = require("lpresence.payloads")
 
+local error_kind = require("lpresence.error_kind")
+local utils = require("lpresence.utils")
+
+local class = require("classy")
+local json = require("cjson")
+local vstruct
+if not (string.pack and string.unpack) then vstruct = require("vstruct") end
+local winapi, socket
+if utils.on_windows then winapi = require("winapi")
+else socket = require("cqueues.socket") end
 
 ---@class lpresence.BaseClient_params
----@field client_id lpresence.discord_id
----@field timeout integer?
----@field pipe integer?
+---@field client_id lpresence.snowflake The OAuth2 Client ID
+---@field timeout integer? Poll timeout in miliseconds (POSIX only)
+---@field pipe integer? An ID for the IPC, e.g `discord-ipc-{pipe}`
 
 ---@class lpresence.BaseClient
----@overload fun(params: lpresence.discord_id|lpresence.BaseClient_params): lpresence.BaseClient
+---@overload fun(params: lpresence.snowflake|lpresence.BaseClient_params): lpresence.BaseClient
 local BaseClient = class "BaseClient"
 
 function BaseClient:__init(params)
     if type(params) == "table" then
-        self.client_id = tostring(params[1])
-        self.loop = params.loop
+        self.client_id = tostring(params.client_id)
         self.timeout = params.timeout
         self.pipe = params.pipe
     else
@@ -31,46 +32,16 @@ function BaseClient:__init(params)
     end
 end
 
-function BaseClient:_sread(n)
-    local d
-    if utils.on_windows then
-        copas.timeout(self.timeout, self.to_handler)
-        d = self.sock:read(n)
-        copas.timeout(0)
-    else
-        d = copas.receive(self.sock, n)
-    end
-    return d
-end
-
-function BaseClient:_swrite(d)
-    if utils.on_windows then
-        copas.timeout(self.timeout, self.to_handler)
-        self.sock:write(d)
-        copas.timeout(0)
-    else
-        copas.send(self.sock, d)
-    end
-end
-
-function BaseClient:_sclose()
-    if not utils.on_windows then
-        self.sock:shutdown()
-    end
-    self.sock:close()
-end
-
 ---@return table
 function BaseClient:read()
-    local preamble = self:_sread(8)
+    local preamble = self.sock:read(8)
     local length
     if vstruct then
         _, length = vstruct.readvals("<(2*u4)", preamble)
     else
         _, length = string.unpack("<II", preamble)
     end
-    local p = self:_sread(length)
-    local payload = json.decode(p)
+    local payload = json.decode(self.sock:read(length))
 
     if payload.evt == "ERROR" then error(error_kind.server_error(payload.data.message)) end
     return payload
@@ -79,7 +50,6 @@ end
 ---@param op integer
 ---@param payload table
 function BaseClient:send(op, payload)
-        if class.is_a(payload, Payloads) then payload = payload.data end
         local json_payload = json.encode(payload)
 
         assert(self.sock, "You'll to connect your client before sending events")
@@ -91,41 +61,34 @@ function BaseClient:send(op, payload)
             data = string.pack("<II", op, #json_payload)
         end
 
-        self:_swrite(data .. json_payload)
+        self.sock:write(data..json_payload)
 end
 
 function BaseClient:handshake()
     local ipc_path = assert(utils.get_ipc_path(self.pipe), error_kind.invalid_path())
 
     if not utils.on_windows then
-        local unix_socket = require("socket.unix")
-        local s = assert(unix_socket())
+        local s = assert(socket.connect{ path = ipc_path }, error_kind.invalid_pipe())
 
-        copas.settimeout(s, self.timeout)
-
-        assert(copas.connect(s, ipc_path), error_kind.invalid_pipe())
+        s:settimeout(self.timeout)
+        assert(s:connect(), error_kind.timed_out())
 
         self.sock = s
     elseif winapi then
-        local p = assert(winapi.open_pipe(ipc_path), error_kind.invalid_pipe())
+        local pipe = assert(winapi.open_pipe(ipc_path), error_kind.invalid_pipe())
 
-        function self.to_handler()
-            error(error_kind.connection_timed_out())
-        end
-
-        self.sock = p
+        self.sock = pipe
     end
 
     self:send(0, { v = 1, client_id = self.client_id })
-    local preamble = self:_sread(8)
+    local preamble = self.sock:read(8)
     local length
     if vstruct then
         _, length = vstruct.readvals("<(2*i4)", preamble)
     else
         _, length = string.unpack("<ii", preamble)
     end
-    local p = self:_sread(length)
-    local data = json.decode(p)
+    local data = json.decode(self.sock:read(length))
 
     if data.code then
         if data.code == 4000 then
