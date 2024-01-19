@@ -3,8 +3,8 @@
 task.dev() {
   mkdir .luals
   declare -A submods=(
-    [luasocket]=https://github.com/LuaCATS/luasocket
-    [lua - cjson]=https://github.com/goldenstein64/lua-cjson-definitions
+    ['luasocket']=https://github.com/LuaCATS/luasocket
+    ['lua-cjson']=https://github.com/goldenstein64/lua-cjson-definitions
   )
 
   for k in "${!submods[@]}"; do
