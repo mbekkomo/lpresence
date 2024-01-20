@@ -11,6 +11,6 @@ indent_size = 4
 indent_style = space
 indent_size = 2
 
-[*.sh]
+[{*.sh,.envrc}]
 indent_style = space
 indent_size = 2

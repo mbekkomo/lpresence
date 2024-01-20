@@ -1,3 +1,6 @@
+--- A Lua wrapper for Discord IPC and RPC.
+--@module lpresence
+
 local utils = require("lpresence.utils")
 
 assert(require("classy"), "classy is required for class initialization, see https://github.com/siffiejoe/lua-classy/")
@@ -25,7 +28,10 @@ if not string.pack or not string.unpack then
     )
 end
 
-return {
-    Client = require("lpresence.client"),
-    RPC = require("lpresence.rpc")
+--- Aliases module.
+local lpresence = {
+    Client = require("lpresence.client"), -- Alias to `lpresence.client`
+    RPC = require("lpresence.rpc"), -- Alias to `lpresence.rpc`
 }
+
+return lpresence
