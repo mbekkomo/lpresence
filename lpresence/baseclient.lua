@@ -15,13 +15,6 @@ else
     socket = require("cqueues.socket")
 end
 
----@class lpresence.BaseClient_params
----@field client_id lpresence.snowflake The OAuth2 Client ID
----@field timeout integer? Poll timeout in miliseconds (POSIX only)
----@field pipe integer? An ID for the IPC, e.g `discord-ipc-{pipe}`
-
----@class lpresence.BaseClient
----@overload fun(params: lpresence.snowflake|lpresence.BaseClient_params): lpresence.BaseClient
 local BaseClient = class "BaseClient"
 
 function BaseClient:__init(params)
@@ -34,7 +27,6 @@ function BaseClient:__init(params)
     end
 end
 
----@return table
 function BaseClient:read()
     local preamble = self.sock:read(8)
     local length
@@ -49,8 +41,6 @@ function BaseClient:read()
     return payload
 end
 
----@param op integer
----@param payload table
 function BaseClient:send(op, payload)
     local json_payload = json.encode(payload)
 
