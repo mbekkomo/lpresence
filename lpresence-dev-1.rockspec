@@ -12,13 +12,13 @@ description = {
     homepage = "https://github.com/komothecat/lpresence",
     issues_url = "https://github.com/komothecat/lpresence/issues",
     license = "MIT",
-    
+
     summary = "A Lua wrapper for Discord IPC and RPC. ",
     detailed = [[
 A Lua wrapper for Discord IPC and RPC.
 
 More information is on the GitHub page.
-]]
+]],
 }
 dependencies = {
     "lua >= 5.1, < 5.5",
@@ -33,7 +33,7 @@ dependencies = {
         windows = {
             "winapi >= 1.4.2",
         },
-    }
+    },
 }
 build = {
     type = "builtin",

@@ -1,5 +1,5 @@
---- A Lua wrapper for Discord IPC and RPC.
---@module lpresence
+--- Entry point to load all lpresence modules.
+-- @module lpresence
 
 local utils = require("lpresence.utils")
 
@@ -8,7 +8,10 @@ assert(
     require("cjson"),
     "lua-cjson is required for JSON encoding and decoding, see https://github.com/openresty/lua-cjson/"
 )
-assert(require("lfs"), "luafilesystem is required for finding Discord IPC socket, see https://lunarmodules.github.io/luafilesystem/")
+assert(
+    require("lfs"),
+    "luafilesystem is required for finding Discord IPC socket, see https://lunarmodules.github.io/luafilesystem/"
+)
 
 if utils.on_windows then
     assert(
@@ -17,7 +20,8 @@ if utils.on_windows then
     )
 else
     assert(
-        require("cqueues"), "cqueues is required on POSIX platforms (i.e Linux, MacOS) to interact with Discord, see https://github.com/wahern/cqueues/"
+        require("cqueues"),
+        "cqueues is required on POSIX platforms (i.e Linux, MacOS) to interact with Discord, see https://github.com/wahern/cqueues/"
     )
 end
 
@@ -28,10 +32,12 @@ if not string.pack or not string.unpack then
     )
 end
 
---- Aliases module.
-local lpresence = {
-    Client = require("lpresence.client"), -- Alias to `lpresence.client`
-    RPC = require("lpresence.rpc"), -- Alias to `lpresence.rpc`
-}
+--- Shortcut to @{lpresence.client}.
+-- @table Client
 
-return lpresence
+--- Shortcut to @{lpresence.rpc}.
+-- @table RPC
+return {
+    Client = require("lpresence.client"),
+    RPC = require("lpresence.rpc"),
+}

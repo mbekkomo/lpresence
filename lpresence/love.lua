@@ -1,5 +1,13 @@
+--[[@diagnostic disable:duplicate-set-field]]
+
+--- Wrapper for Love2D
+-- @module lpresence.love
+
+--- Shortcut to this module. Exported to love namespace.
+-- @type love.rpc
+
 love.rpc = {
-    initialized = false
+    initialized = false,
 }
 
 local signals = {
@@ -51,45 +59,37 @@ end
 ]=]
 local rpc_channel = love.thread.getChannel("RPCData")
 
----@param application_id lpresence.snowflake
----@return boolean ok
---
--- Initialize RPC thread.
---
+--- Initialize RPC thread.
+-- @param[type=string] application_id [Application ID](https://en.wikipedia.org/wiki/Snowflake_ID)
 function love.rpc.init(application_id)
-    if love.rpc.initialized then
-        error("RPC thread has already been initialized")
-    end
+    if love.rpc.initialized then error("RPC thread has already been initialized") end
 
     love.rpc.initialized = true
 
     local thread = love.thread.newThread(chunk:format(application_id))
     thread:start()
     love.rpc.thread = thread
-
-    return true
 end
 
--- 
--- Connect to the Rich Presence.
---
+--- Connect to the Rich Presence.
 function love.rpc.connect()
     rpc_channel:push(signals.CONNECT)
 end
 
----@param activity lpresence.Activity
---
--- Update Rich Presence.
---
+--- Update Rich Presence.
+-- @param[type=table] activity [Activity](https://discord.com/developers/docs/topics/gateway-events#activity-object) object
 function love.rpc.update(activity)
     rpc_channel:push(signals.UPDATE)
     rpc_channel:push(activity)
 end
 
+--- Clear Rich Presence.
 function love.rpc.clear()
     rpc_channel:push(signals.CLEAR)
 end
 
+--- Close connection to Rich Presence.
+--- Also close thread holding the connection.
 function love.rpc.close()
     rpc_channel:push(signals.CLOSE)
     love.rpc.thread:wait()

@@ -13,23 +13,20 @@
 local BaseClient = {}
 
 ---@return table
--- 
+--
 -- Read the payload and return as table.
-function BaseClient:read()
-end
+function BaseClient:read() end
 
 ---@param op integer
 ---@param payload table
 --
 -- Send a payload with op code.
 --
-function BaseClient:send(op, payload)
-end
+function BaseClient:send(op, payload) end
 
 --
 -- Initialize connection.
 --
-function BaseClient:handshake()
-end
+function BaseClient:handshake() end
 
 return BaseClient

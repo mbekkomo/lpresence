@@ -1,6 +1,10 @@
 -- Enable compatibilty for Pluto 0.9.0+
 -- @pluto_use class = false
 
+--- API wrapper for IPC connection
+-- @module lpresence.client
+
+--
 -- TODO: Allow to subscribe to an event (`on`, `off` and `event_emit` methods).
 --
 

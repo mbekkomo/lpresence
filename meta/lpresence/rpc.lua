@@ -4,22 +4,19 @@
 ---@overload fun(params: lpresence.snowflake|lpresence.BaseClient_params): lpresence.RPC
 local RPC = {}
 
-function RPC:__init(params)
-end
+function RPC:__init(params) end
 
 ---@see lpresence.RPC.handshake
 --
 -- Initialize RPC connection.
 -- Equivalent to `RPC:handshake`.
 --
-function RPC:connect()
-end
+function RPC:connect() end
 
 --
 -- Close the RPC connection.
 --
-function RPC:close()
-end
+function RPC:close() end
 
 ---@class lpresence.Activity
 ---@field name? string
@@ -89,17 +86,15 @@ end
 ---@param pid? integer
 ---@return table response
 --
--- Update rich presence.
+-- Update Rich Presence.
 --
-function RPC:update(activity, pid)
-end
+function RPC:update(activity, pid) end
 
 ---@param pid integer
 ---@return table response
 --
--- Clear rich presence.
+-- Clear Rich Presence.
 --
-function RPC:clear(pid)
-end
+function RPC:clear(pid) end
 
 return RPC
