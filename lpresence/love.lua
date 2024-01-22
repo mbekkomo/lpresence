@@ -6,9 +6,7 @@
 --- Shortcut to this module. Exported to 'love' namespace.
 -- @type love.rpc
 
-if not love then
-    error("This module is intended for Love2D!")
-end
+if not love then error("This module is intended for Love2D!") end
 
 love.rpc = {
     initialized = false,

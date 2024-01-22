@@ -14,7 +14,7 @@ source = {
 if not _version then
     source.branch = "main"
 else
-    source.tag = "v".._version
+    source.tag = "v" .. _version
 end
 
 description = {
@@ -48,12 +48,12 @@ build = {
     type = "builtin",
     modules = {
         ["lpresence"] = "lpresence.lua",
-        ['lpresence.baseclient'] = "lpresence/baseclient.lua",
-        ['lpresence.client'] = "lpresence/client.lua",
-        ['lpresence.error_kind'] = "lpresence/error_kind.lua",
-        ['lpresence.love'] = "lpresence/love.lua",
-        ['lpresence.payloads'] = "lpresence/payloads.lua",
-        ['lpresence.rpc'] = "lpresence/rpc.lua",
-        ['lpresence.utils'] = "lpresence/utils.lua",
+        ["lpresence.baseclient"] = "lpresence/baseclient.lua",
+        ["lpresence.client"] = "lpresence/client.lua",
+        ["lpresence.error_kind"] = "lpresence/error_kind.lua",
+        ["lpresence.love"] = "lpresence/love.lua",
+        ["lpresence.payloads"] = "lpresence/payloads.lua",
+        ["lpresence.rpc"] = "lpresence/rpc.lua",
+        ["lpresence.utils"] = "lpresence/utils.lua",
     },
 }
