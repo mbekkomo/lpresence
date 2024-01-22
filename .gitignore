@@ -6,6 +6,7 @@
 
 /lpresence-*.rockspec
 !/lpresence-dev-1.rockspec
+/*.rock
 
 # devel
 /.luals
