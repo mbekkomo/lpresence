@@ -46,5 +46,10 @@ dependencies = {
 }
 build = {
     type = "builtin",
-    modules = {},
+    modules = {
+        ["lpresence"] = "lpresence.lua",
+        ["lpresence.client"] = "lpresence/client.lua",
+        ["lpresence.rpc"] = "lpresence/rpc.lua",
+        ["lpresence.love"] = "lpresence/love.lua"
+    },
 }
