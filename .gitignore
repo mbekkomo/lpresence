@@ -7,7 +7,5 @@
 /lpresence-*.rockspec
 !/lpresence-dev-1.rockspec
 
-/config.ld.latest
-
 # devel
 /.luals

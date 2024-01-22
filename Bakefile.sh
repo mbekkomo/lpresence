@@ -64,20 +64,20 @@ task.gendoc() {
   util.check_luarocks_package lua-discount || luarocks install lua-discount
 
   local ldoc_config="config.ld.latest"
-  if [[ ! -f "$ldoc_config" ]]; then
+  if [[ ! -f "$ldoc_config" && -n "$1" ]]; then
     ldoc_config="config.ld"
   fi
 
   ldoc -c "$ldoc_config" .
 
-  if [[ -n "$1" ]] && bake.assert_cmd python; then
+  if [[ -n "$2" ]] && bake.assert_cmd python; then
     python -mhttp.server -d doc/
   fi
 }
 
 # format
 task.format() {
-  stylua . ./lpresence-dev-1.rockspec
+  stylua . ./lpresence-dev-1.rockspec ./config.ld
   while read -r f; do
     shfmt -w "$f"
   done < <(find . -name '*.sh' -not -path 'lua_modules')
