@@ -57,6 +57,13 @@ task.genrelease() {
   return 0
 }
 
+task.genmodules() {
+  for f in lpresence/*; do
+    : "${f%.lua}"
+    echo "['${_//\//.}'] = "'"'"$f"'",'
+  done
+}
+
 # gendoc [preview-generated-doc]
 #watch: -i lua_modules -e lua
 task.gendoc() {

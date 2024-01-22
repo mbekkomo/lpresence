@@ -48,8 +48,12 @@ build = {
     type = "builtin",
     modules = {
         ["lpresence"] = "lpresence.lua",
-        ["lpresence.client"] = "lpresence/client.lua",
-        ["lpresence.rpc"] = "lpresence/rpc.lua",
-        ["lpresence.love"] = "lpresence/love.lua"
+        ['lpresence.baseclient'] = "lpresence/baseclient.lua",
+        ['lpresence.client'] = "lpresence/client.lua",
+        ['lpresence.error_kind'] = "lpresence/error_kind.lua",
+        ['lpresence.love'] = "lpresence/love.lua",
+        ['lpresence.payloads'] = "lpresence/payloads.lua",
+        ['lpresence.rpc'] = "lpresence/rpc.lua",
+        ['lpresence.utils'] = "lpresence/utils.lua",
     },
 }
