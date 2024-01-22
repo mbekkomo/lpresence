@@ -30,7 +30,7 @@ After the dependencies are installed, move `lpresence/` directory and `lpresence
 > [!WARNING]
 > 
 > lpresence is only tested on Linux (EndavourOS), and I'm not sure if it's working properly on Windows.<br>
-> If anyone wanted to volunteer on testing it, please refer to issue #1
+> If anyone wanted to volunteer on testing it, please refer to issue [#1](https://github.com/komothecat/lpresence/issues/1).
 >
 
 Check the [documentation](https://komothecat.github.io/lpresence) for usages about lpresence.
