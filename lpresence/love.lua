@@ -6,6 +6,10 @@
 --- Shortcut to this module. Exported to 'love' namespace.
 -- @type love.rpc
 
+if not love then
+    error("This module is intended for Love2D!")
+end
+
 love.rpc = {
     initialized = false,
 }
@@ -50,6 +54,7 @@ while 1 do
         rpc:connect()
     elseif signal == signals.CLOSE then
         rpc:close()
+        break
     elseif signal == signals.UPDATE then
         rpc:update(rpc_channel:demand(), getpid())
     elseif signal == signals.CLEAR then
