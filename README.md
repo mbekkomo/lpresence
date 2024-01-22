@@ -29,7 +29,7 @@ After the dependencies are installed, move `lpresence/` directory and `lpresence
 
 > [!WARNING]
 > 
-> lpresence is only tested on Linux (EndavourOS), and I'm not sure if it's working properly on Windows.
+> lpresence is only tested on Linux (EndavourOS), and I'm not sure if it's working properly on Windows.<br>
 > If anyone wanted to volunteer on testing it, please refer to issue #1.
 >
 
