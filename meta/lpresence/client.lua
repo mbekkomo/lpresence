@@ -1,6 +1,6 @@
 ---@meta
 
-----
+--
 -- TODO: Allow to subscribe to an event (`on`, `off` and `event_emit` methods).
 --
 

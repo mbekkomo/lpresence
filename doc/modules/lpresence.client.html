@@ -24,13 +24,19 @@
 
 <div id="navigation">
 <br/>
-<h1>lpresence</h1>
+<h1>lpresence dev-1</h1>
 
 
 <ul>
   <li><a href="../index.html">Index</a></li>
 </ul>
 
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Class_Client">Class Client </a></li>
+</ul>
 
 
 <h2>Modules</h2>
@@ -46,23 +52,689 @@
 <div id="content">
 
 <h1>Module <code>lpresence.client</code></h1>
-<p>API wrapper for IPC connection</p>
+<p>API wrapper for the IPC.</p>
 <p>
 </p>
 
 
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#constructor">constructor (params)</a></td>
+	<td class="summary">Client constructor.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#clientoptions">clientoptions</a></td>
+	<td class="summary">Client constructor options.</td>
+	</tr>
+</table>
+<h2><a href="#Class_Client">Class Client </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Client:connect">Client:connect ()</a></td>
+	<td class="summary">Connect to the IPC.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:close">Client:close ()</a></td>
+	<td class="summary">Close the IPC connection.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:authorize">Client:authorize (client_id, scopes)</a></td>
+	<td class="summary">Authorize access to the IPC.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:authenticate">Client:authenticate (token)</a></td>
+	<td class="summary">Authenticate to the IPC.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:get_guild">Client:get_guild (guild_id)</a></td>
+	<td class="summary">Get guild by ID.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:get_guilds">Client:get_guilds ()</a></td>
+	<td class="summary">Get all guilds the client is in.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:get_channel">Client:get_channel (channel_id)</a></td>
+	<td class="summary">Get channel by ID.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:get_channels">Client:get_channels (guild_id)</a></td>
+	<td class="summary">Get channels in guild.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:set_user_voice_settings">Client:set_user_voice_settings (user_id, pan_left, pan_right, volume, mute)</a></td>
+	<td class="summary">Set user voice settings.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:select_voice_channel">Client:select_voice_channel (channel_id)</a></td>
+	<td class="summary">Join a voice channel.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:get_selected_voice_channel">Client:get_selected_voice_channel ()</a></td>
+	<td class="summary">Get voice channel the client is in.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:select_text_channel">Client:select_text_channel (channel_id)</a></td>
+	<td class="summary">Join or leave text channel.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:get_voice_settings">Client:get_voice_settings ()</a></td>
+	<td class="summary">Get voice settings.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:set_voice_settings">Client:set_voice_settings (voice_settings)</a></td>
+	<td class="summary">Set voice settings.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:set_activity">Client:set_activity (activity, pid)</a></td>
+	<td class="summary">Set activity.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:clear_activity">Client:clear_activity (pid)</a></td>
+	<td class="summary">Clear activity.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:capture_screenshot">Client:capture_screenshot (action)</a></td>
+	<td class="summary">Capture a screenshot.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:send_activity_join_invite">Client:send_activity_join_invite (user_id)</a></td>
+	<td class="summary">Accept an Ask to Join request.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Client:close_activity_request">Client:close_activity_request (user_id)</a></td>
+	<td class="summary">Reject an Ask to Join request.</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
 
 
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "constructor"></a>
+    <strong>constructor (params)</strong>
+    </dt>
+    <dd>
+    Client constructor.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">params</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a> or <a class="type" href="../modules/lpresence.client.html#clientoptions">clientoptions</a></span>
+         <a href="https://en.wikipedia.org/wiki/Snowflake_ID">Application ID</a> or constructor options
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/lpresence.client.html#Client">Client</a></span>
+
+
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">local</span> client = <span class="function-name">Client</span>(<span class="string">"64567352374564"</span>)</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> client = <span class="function-name">Client</span> {
+    client_id = <span class="string">"64567352374564"</span>,
+    timeout = <span class="number">10</span>,
+}</pre></li>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "clientoptions"></a>
+    <strong>clientoptions</strong>
+    </dt>
+    <dd>
+    Client constructor options.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">client_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         <a href="https://en.wikipedia.org/wiki/Snowflake_ID">Application ID</a>
+        </li>
+        <li><span class="parameter">timeout</span>
+            <span class="types">optional <span class="type">integer</span></span>
+         TImeout for connection and response (POSIX only)
+        </li>
+        <li><span class="parameter">pipe</span>
+            <span class="types">optional <span class="type">integer</span></span>
+         ID for IPC path
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_Client"></a>Class Client </h2>
+
+          <div class="section-description">
+          Client class, see the <a href="../modules/lpresence.client.html#constructor">constructor</a>.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "Client:connect"></a>
+    <strong>Client:connect ()</strong>
+    </dt>
+    <dd>
+    Connect to the IPC.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:close"></a>
+    <strong>Client:close ()</strong>
+    </dt>
+    <dd>
+    Close the IPC connection.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:authorize"></a>
+    <strong>Client:authorize (client_id, scopes)</strong>
+    </dt>
+    <dd>
+    Authorize access to the IPC.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">client_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         <a href="https://en.wikipedia.org/wiki/Snowflake_ID">Application ID</a>
+        </li>
+        <li><span class="parameter">scopes</span>
+            <span class="types"><span class="type">Array(string)</span></span>
+         <a href="https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes">OAuth2 Scopes</a>
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:authenticate"></a>
+    <strong>Client:authenticate (token)</strong>
+    </dt>
+    <dd>
+    Authenticate to the IPC.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">token</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         OAuth2 access token
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:get_guild"></a>
+    <strong>Client:get_guild (guild_id)</strong>
+    </dt>
+    <dd>
+    Get guild by ID.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">guild_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the guild
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:get_guilds"></a>
+    <strong>Client:get_guilds ()</strong>
+    </dt>
+    <dd>
+    Get all guilds the client is in.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Array(table)</span></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:get_channel"></a>
+    <strong>Client:get_channel (channel_id)</strong>
+    </dt>
+    <dd>
+    Get channel by ID.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">channel_id</span>
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+        channel_id ID of the channel</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:get_channels"></a>
+    <strong>Client:get_channels (guild_id)</strong>
+    </dt>
+    <dd>
+    Get channels in guild.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">guild_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the guild
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">Array(table)</span></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:set_user_voice_settings"></a>
+    <strong>Client:set_user_voice_settings (user_id, pan_left, pan_right, volume, mute)</strong>
+    </dt>
+    <dd>
+    Set user voice settings.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">user_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the user
+        </li>
+        <li><span class="parameter">pan_left</span>
+            <span class="types">optional <span class="type">number</span></span>
+         Pan left
+        </li>
+        <li><span class="parameter">pan_right</span>
+            <span class="types">optional <span class="type">number</span></span>
+         Pan right
+        </li>
+        <li><span class="parameter">volume</span>
+            <span class="types">optional <span class="type">number</span></span>
+         Volume of the user
+        </li>
+        <li><span class="parameter">mute</span>
+            <span class="types">optional <span class="type">boolean</span></span>
+         Mute state of user
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:select_voice_channel"></a>
+    <strong>Client:select_voice_channel (channel_id)</strong>
+    </dt>
+    <dd>
+    Join a voice channel.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">channel_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the voice channel
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:get_selected_voice_channel"></a>
+    <strong>Client:get_selected_voice_channel ()</strong>
+    </dt>
+    <dd>
+    Get voice channel the client is in.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:select_text_channel"></a>
+    <strong>Client:select_text_channel (channel_id)</strong>
+    </dt>
+    <dd>
+    Join or leave text channel.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">channel_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the text channel
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:get_voice_settings"></a>
+    <strong>Client:get_voice_settings ()</strong>
+    </dt>
+    <dd>
+    Get voice settings.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:set_voice_settings"></a>
+    <strong>Client:set_voice_settings (voice_settings)</strong>
+    </dt>
+    <dd>
+    Set voice settings.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">voice_settings</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+         <a href="https://discord.com/developers/docs/topics/rpc#setvoicesettings-set-voice-settings-argument-and-response-structure">Voice settings</a>
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:set_activity"></a>
+    <strong>Client:set_activity (activity, pid)</strong>
+    </dt>
+    <dd>
+    Set activity.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">activity</span>
+            <span class="types">optional <a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+         <a href="https://discord.com/developers/docs/topics/gateway-events#activity-object">Activity object</a>
+        </li>
+        <li><span class="parameter">pid</span>
+            <span class="types">optional <span class="type">number</span></span>
+         PID of activity
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:clear_activity"></a>
+    <strong>Client:clear_activity (pid)</strong>
+    </dt>
+    <dd>
+    Clear activity.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pid</span>
+            <span class="types">optional <span class="type">number</span></span>
+         PID of activity
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:capture_screenshot"></a>
+    <strong>Client:capture_screenshot (action)</strong>
+    </dt>
+    <dd>
+    Capture a screenshot.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         Action for the screenshot
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:send_activity_join_invite"></a>
+    <strong>Client:send_activity_join_invite (user_id)</strong>
+    </dt>
+    <dd>
+    Accept an Ask to Join request.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">user_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the user
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Client:close_activity_request"></a>
+    <strong>Client:close_activity_request (user_id)</strong>
+    </dt>
+    <dd>
+    Reject an Ask to Join request.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">user_id</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.4">string</a></span>
+         ID of the user
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.4/manual.html#6.6">table</a></span>
+        Response to payload
+    </ol>
+
+
+
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/lunarmodules/LDoc">LDoc 1.5.0</a></i>
-<i style="float:right;">Last updated 2024-01-21 19:47:14 </i>
+<i style="float:right;">Last updated 2024-01-22 20:52:55 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

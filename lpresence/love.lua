@@ -1,9 +1,9 @@
 --[[@diagnostic disable:duplicate-set-field]]
 
---- Wrapper for Love2D
+--- Wrapper for Love2D.
 -- @module lpresence.love
 
---- Shortcut to this module. Exported to love namespace.
+--- Shortcut to this module. Exported to 'love' namespace.
 -- @type love.rpc
 
 love.rpc = {
@@ -73,27 +73,32 @@ end
 
 --- Connect to the Rich Presence.
 function love.rpc.connect()
+    if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
     rpc_channel:push(signals.CONNECT)
 end
 
 --- Update Rich Presence.
 -- @param[type=table] activity [Activity](https://discord.com/developers/docs/topics/gateway-events#activity-object) object
 function love.rpc.update(activity)
+    if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
     rpc_channel:push(signals.UPDATE)
     rpc_channel:push(activity)
 end
 
 --- Clear Rich Presence.
 function love.rpc.clear()
+    if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
     rpc_channel:push(signals.CLEAR)
 end
 
 --- Close connection to Rich Presence.
 --- Also close thread holding the connection.
 function love.rpc.close()
+    if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
     rpc_channel:push(signals.CLOSE)
     love.rpc.thread:wait()
     love.rpc.thread:release()
+    love.rpc.initialized = false
 end
 
 return love.rpc

@@ -1,13 +1,22 @@
 ---@diagnostic disable
-local _version = ""
+
+local _version
+
 rockspec_format = "3.0"
 
 package = "lpresence"
-version = "dev-1"
+version = (_version or "dev-1")
+
 source = {
     url = "git+https://github.com/komothecat/lpresence.git",
-    branch = "main",
 }
+
+if not _version then
+    source.branch = "main"
+else
+    source.tag = "v".._version
+end
+
 description = {
     homepage = "https://github.com/komothecat/lpresence",
     issues_url = "https://github.com/komothecat/lpresence/issues",

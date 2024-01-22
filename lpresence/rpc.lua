@@ -26,7 +26,7 @@ local class = require("classy")
 -- @field[type=?integer] pipe ID for IPC path
 -- @table rpcoptions
 
---- RPC class. See @{constructor}.
+--- RPC class, see the @{constructor}.
 -- @see constructor
 -- @type RPC
 local RPC = class("RPC", BaseClient)
@@ -48,7 +48,7 @@ function RPC:close()
 end
 
 --- Update the Rich Presence.
--- @param[type=table] activity [Activity](https://discord.com/developers/docs/topics/gateway-events#activity-object) object
+-- @param[type=?table] activity [Activity object](https://discord.com/developers/docs/topics/gateway-events#activity-object) object
 -- @param[type=?integer] pid Process ID
 -- @treturn table Response to payload
 -- @usage rpc_client:update {

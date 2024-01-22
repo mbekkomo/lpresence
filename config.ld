@@ -3,8 +3,13 @@
 
 local version
 
-project = "lpresence"
+project = "lpresence "..(version or "dev-1")
 description = "lpresence "..(version or "dev-1")
+full_description = [[
+A Lua wrapper for Discord IPC and RPC.
+
+More information is on [GitHub](https://github.com/komothecat/lpresence#readme).
+]]
 package = "lpresence"
 
 file = { "./lpresence.lua", "./lpresence/client.lua", "./lpresence/rpc.lua", "./lpresence/love.lua" }
