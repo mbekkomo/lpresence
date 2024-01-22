@@ -1,9 +1,0 @@
-return {
-   dependencies = {
-      classy = "0.4-1",
-      cqueues = "20200726.54-0",
-      ["lua-cjson"] = "2.1.0.10-1",
-      luafilesystem = "1.8.0-1",
-      vstruct = "2.1.1-1"
-   },
-}
