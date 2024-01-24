@@ -44,7 +44,7 @@ end
 function BaseClient:send(op, payload)
     local json_payload = json.encode(payload)
 
-    assert(self.sock, "You'll to connect your client before sending events")
+    assert(self.sock, "You'll have to connect your client before sending events")
 
     local data
     if vstruct then

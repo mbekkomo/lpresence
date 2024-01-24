@@ -3,8 +3,8 @@
 
 local version = "0.1.0-1"
 
-project = "lpresence "..(version or "dev-1")
-description = "lpresence "..(version or "dev-1")
+project = "lpresence " .. (version or "dev-1")
+description = "lpresence " .. (version or "dev-1")
 full_description = [[
 A Lua wrapper for Discord IPC and RPC.
 
