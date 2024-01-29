@@ -74,7 +74,7 @@ while 1 do
     elseif signal == signals.CLEAR then
         rpc:clear_activity(getpid())
     elseif signal == signals.REGISTER then
-        local fake_env = deep_copy(_ENV)
+        local fake_env = deep_copy(_ENV or _G)
         rpc:register_event(rpc_channel:demand(), function(d)
             load(rpc_channel:demand(), nil, nil, setmetatable(fake_env, {
                 __index = { data = d }
