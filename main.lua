@@ -4,9 +4,9 @@ require("lpresence.love")
 function love.load()
     -- Initialize the thread.
     love.rpc.init("1197916593200578610") -- Pseudo ID, replace with real one.
-    love.rpc.register_event("ready", [[
+    love.rpc.register_event("ready", function(data)
         print(("Connected as user %s#%s"):format(data.user.username, data.user.discriminator))
-    ]])
+    end)
     -- Connect to the RPC.
     love.rpc.connect()
     -- Set the RPC

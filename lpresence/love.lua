@@ -62,11 +62,7 @@ while 1 do
     elseif signal == signals.CLEAR then
         rpc:clear_activity(getpid())
     elseif signal == signals.REGISTER then
-        rpc:register_event(rpc_channel:demand(), function(d)
-            load(rpc_channel:demand(), nil, nil, setmetatable({ data = d }, {
-                __index = { _G = _G },
-            }))
-        end, rpc_channel:demand())
+        rpc:register_event(rpc_channel:demand(), rpc_channel:demand()[1], rpc_channel:demand())
     elseif signal == signals.UNREGISTER then
         rpc:unregister_event(rpc_channel:demand(), rpc_channel:demand())
     end
@@ -118,13 +114,13 @@ end
 
 --- Register an event.
 -- @param[type=string] event [Event name](https://discord.com/developers/docs/topics/rpc#commands-and-events-rpc-events)
--- @param[type=string] func Event callback
+-- @param[type=function(data)] func Event callback
 -- @param[type=?table] args Event args
 function love.rpc.register_event(event, func, args)
     if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
     rpc_channel:push(signals.REGISTER)
     rpc_channel:push(event)
-    rpc_channel:push(func)
+    rpc_channel:push({ func })
     rpc_channel:push(args or {})
 end
 
