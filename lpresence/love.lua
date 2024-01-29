@@ -141,7 +141,7 @@ function love.rpc.register_event(event, func, args)
     rpc_channel:push(args or {})
 end
 
--- Unregister an event.
+--- Unregister an event.
 -- @param[type=string] event [Event name](https://discord.com/developers/docs/topics/rpc#commands-and-events-rpc-events)
 -- @param[type=?table] args Event args
 function love.rpc.unregister_event(event, args)
