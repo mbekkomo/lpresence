@@ -1,7 +1,7 @@
 -- vim: ft=lua
 ---@diagnostic disable
 
-local version = "0.1.1-1"
+local version = "0.2.0-1"
 
 project = "lpresence " .. (version or "dev-1")
 description = "lpresence " .. (version or "dev-1")

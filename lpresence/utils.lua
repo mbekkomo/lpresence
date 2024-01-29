@@ -1,19 +1,18 @@
-local error_kind = require("lpresence.error_kind")
-
 local lfs = require("lfs")
 
 local utils = {}
 
 utils.on_windows = package.config:sub(1, 1) == "\\"
 
----@param module string
----@param msg string
----@return any
-function utils.assert_require(module, msg)
-    local _, m = xpcall(require, function()
-        error(error_kind.module_not_found(module, msg))
-    end, module)
-    return m
+function utils.recursive_merge(t1, t2)
+    for k, v in pairs(t2) do
+        if type(v) == "table" and type(t1[k] or false) == "table" then
+            utils.recursive_merge(t1[k], t2[k])
+        else
+            t1[k] = v
+        end
+    end
+    return t1
 end
 
 ---@param id integer

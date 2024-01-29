@@ -51,6 +51,8 @@ task.genrelease() {
   ldoc_config="${ldoc_config//local version/local version = \"$version_next\"}"
   echo "$ldoc_config" > config.ld.latest
 
+  git add .
+  git commit -m "release: version v$version_next"
   git tag -a "v$version_next" -m "Release: v$version_next"
 
   [[ -n "$2" ]] && git push origin main --follow-tags

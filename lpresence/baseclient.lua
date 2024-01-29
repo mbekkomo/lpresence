@@ -17,14 +17,14 @@ end
 
 local BaseClient = class "BaseClient"
 
-function BaseClient:__init(params)
-    if type(params) == "table" then
-        self.client_id = tostring(params.client_id)
-        self.timeout = params.timeout
-        self.pipe = params.pipe
-    else
-        self.client_id = tostring(params)
-    end
+function BaseClient:__init(id, options)
+    self.client_id = tostring(id)
+    self.options = {
+        timeout = 1,
+        pipe = 0,
+    }
+
+    utils.recursive_merge(self.options, options or {})
 end
 
 function BaseClient:read()
@@ -35,8 +35,12 @@ function BaseClient:read()
     else
         _, length = string.unpack("<II", preamble)
     end
-    local payload = json.decode(self.sock:read(length))
+    local response = self.sock:read(length)
+    local payload = json.decode(response)
 
+    if self._on_event then
+        self:_on_event(response)
+    end
     if payload.evt == "ERROR" then error(error_kind.server_error(payload.data.message)) end
     return payload
 end
@@ -57,12 +61,12 @@ function BaseClient:send(op, payload)
 end
 
 function BaseClient:handshake()
-    local ipc_path = assert(utils.get_ipc_path(self.pipe), error_kind.invalid_path())
+    local ipc_path = assert(utils.get_ipc_path(self.options.pipe), error_kind.invalid_path())
 
     if not utils.on_windows then
         local s = assert(socket.connect { path = ipc_path }, error_kind.invalid_pipe())
 
-        s:settimeout(self.timeout)
+        s:settimeout(self.options.timeout)
         assert(s:connect(), error_kind.timed_out())
 
         self.sock = s
@@ -80,11 +84,16 @@ function BaseClient:handshake()
     else
         _, length = string.unpack("<ii", preamble)
     end
-    local data = json.decode(self.sock:read(length))
+    local response = self.sock:read(length)
+    local data = json.decode(response)
 
     if data.code then
         if data.code == 4000 then error(error_kind.invalid_client_id(self.client_id)) end
         error(error_kind.handshake_failed(data.code, data.message))
+    end
+
+    if data.cmd == "DISPATCH" and data.evt == "READY" and self._on_event then
+        self:_on_event(response)
     end
 end
 

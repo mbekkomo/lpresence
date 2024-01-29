@@ -11,17 +11,12 @@ local utils = require("lpresence.utils")
 local class = require("classy")
 
 --- RPC constructor.
--- @param[type=string|rpcoptions] params [Application ID](https://en.wikipedia.org/wiki/Snowflake_ID) or constructor options
+-- @param[type=string] params [Application ID](https://en.wikipedia.org/wiki/Snowflake_ID)
+-- @param[type=?rpcoptions] options RPC options
 -- @treturn RPC
--- @usage local rpc_client = RPC("64567352374564")
--- @usage local rpc_client = RPC {
---     client_id = "64567352374564",
---     timeout = 10,
--- }
 -- @function constructor
 
---- RPC constructor options.
--- @field[type=string] client_id [Application ID](https://en.wikipedia.org/wiki/Snowflake_ID)
+--- RPC constructor options
 -- @field[type=?integer] timeout TImeout for connection and response (POSIX only)
 -- @field[type=?integer] pipe ID for IPC path
 -- @table rpcoptions
@@ -31,8 +26,8 @@ local class = require("classy")
 -- @type RPC
 local RPC = class("RPC", BaseClient)
 
-function RPC:__init(params)
-    BaseClient.__init(self, params)
+function RPC:__init(id, options)
+    BaseClient.__init(self, id, options)
 end
 
 --- Initialize Rich Presence connection.

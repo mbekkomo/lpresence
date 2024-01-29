@@ -33,8 +33,10 @@ function error_kind.timed_out()
     return "Unable to connect, poll timed out"
 end
 
-function error_kind.module_not_found(module, additional_msg)
-    return ("Unable to load '%s' module, %s"):format(module, additional_msg)
+---@param code integer
+---@param msg string
+---@return string
+function error_kind.discord_error(code, msg)
+    return ("[%d]: %s"):format(code, msg)
 end
-
 return error_kind
