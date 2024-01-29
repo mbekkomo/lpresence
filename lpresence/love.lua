@@ -37,18 +37,6 @@ else
     getpid = ffi.C.getpid
 end
 
-local function deep_copy(tbl)
-    local buff = {}
-    for k, v in pairs(tbl) do
-        if type(v) == "table" then
-            buff[k] = deep_copy(v)
-        else
-            buff[k] = v
-        end
-    end
-    return buff
-end
-
 local signals = {
     CONNECT = 1,
     CLOSE = 2,
@@ -74,10 +62,9 @@ while 1 do
     elseif signal == signals.CLEAR then
         rpc:clear_activity(getpid())
     elseif signal == signals.REGISTER then
-        local fake_env = deep_copy(_ENV or _G)
         rpc:register_event(rpc_channel:demand(), function(d)
-            load(rpc_channel:demand(), nil, nil, setmetatable(fake_env, {
-                __index = { data = d }
+            load(rpc_channel:demand(), nil, nil, setmetatable({ data = d }, {
+                __index = { _G = _G },
             }))
         end, rpc_channel:demand())
     elseif signal == signals.UNREGISTER then
