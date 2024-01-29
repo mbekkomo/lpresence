@@ -259,6 +259,4 @@ function Client:close_activity_request(user_id)
     return coroutine.wrap(self.read)(self).data
 end
 
-print "a"
-
 return Client
