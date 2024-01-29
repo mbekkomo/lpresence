@@ -17,9 +17,11 @@ local signals = {
     CLOSE = 2,
     UPDATE = 3,
     CLEAR = 4,
+    REGISTER = 5,
+    UNREGISTER = 6,
 }
 local chunk = [=[
-local RPC = require("lpresence").RPC
+local Client = require("lpresence").Client
 local ffi = require("ffi")
 
 local getpid
@@ -35,15 +37,29 @@ else
     getpid = ffi.C.getpid
 end
 
+local function deep_copy(tbl)
+    local buff = {}
+    for k, v in pairs(tbl) do
+        if type(v) == "table" then
+            buff[k] = deep_copy(v)
+        else
+            buff[k] = v
+        end
+    end
+    return buff
+end
+
 local signals = {
     CONNECT = 1,
     CLOSE = 2,
     UPDATE = 3,
     CLEAR = 4,
+    REGISTER = 5,
+    UNREGISTER = 6,
 }
 local rpc_channel = love.thread.getChannel("RPCData")
 
-local rpc = RPC("%s")
+local rpc = Client("%s")
 
 while 1 do
     local signal = rpc_channel:demand()
@@ -54,9 +70,18 @@ while 1 do
         rpc:close()
         break
     elseif signal == signals.UPDATE then
-        rpc:update(rpc_channel:demand(), getpid())
+        rpc:set_activity(rpc_channel:demand(), getpid())
     elseif signal == signals.CLEAR then
-        rpc:clear(getpid())
+        rpc:clear_activity(getpid())
+    elseif signal == signals.REGISTER then
+        local fake_env = deep_copy(_ENV)
+        rpc:register_event(rpc_channel:demand(), function(d)
+            load(rpc_channel:demand(), nil, nil, setmetatable(fake_env, {
+                __index = { data = d }
+            }))
+        end, rpc_channel:demand())
+    elseif signal == signals.UNREGISTER then
+        rpc:unregister_event(rpc_channel:demand(), rpc_channel:demand())
     end
 end
 ]=]
@@ -102,6 +127,28 @@ function love.rpc.close()
     love.rpc.thread:wait()
     love.rpc.thread:release()
     love.rpc.initialized = false
+end
+
+--- Register an event.
+-- @param[type=string] event [Event name](https://discord.com/developers/docs/topics/rpc#commands-and-events-rpc-events)
+-- @param[type=string] func Event callback
+-- @param[type=?table] args Event args
+function love.rpc.register_event(event, func, args)
+    if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
+    rpc_channel:push(signals.REGISTER)
+    rpc_channel:push(event)
+    rpc_channel:push(func)
+    rpc_channel:push(args or {})
+end
+
+-- Unregister an event.
+-- @param[type=string] event [Event name](https://discord.com/developers/docs/topics/rpc#commands-and-events-rpc-events)
+-- @param[type=?table] args Event args
+function love.rpc.unregister_event(event, args)
+    if not love.rpc.initialized then error("RPC thread hasn't been initialized yet") end
+    rpc_channel:push(signals.UNREGISTER)
+    rpc_channel:push(event)
+    rpc_channel:push(args or {})
 end
 
 return love.rpc
